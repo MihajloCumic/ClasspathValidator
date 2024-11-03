@@ -21,7 +21,44 @@ import java.util.stream.Collectors;
 public class ClassDependencyFinder implements DependencyFinderSpec {
 
     @Override
-    public Set<String> findDependencies(String classAbsolutePath) {
+    public Set<String> execute(String mainClassAbsolutePath) throws RuntimeException, IOException {
+        Path classFilePath = Paths.get(mainClassAbsolutePath);
+        if (!Files.exists(classFilePath)) throw new RuntimeException("File does not exist.");
+
+        CompilationUnit cu = StaticJavaParser.parse(Files.newInputStream(classFilePath));
+
+        String mainPackageName = cu.getPackageDeclaration()
+                .map(PackageDeclaration::getNameAsString)
+                .orElse("");
+
+        int index = mainClassAbsolutePath.indexOf(mainPackageName.replace(".", "/"));
+        String sourcePath = null;
+        if (index != -1) {
+            sourcePath = mainClassAbsolutePath.substring(0, index);
+        }else throw new RuntimeException("Could not extract source path.");
+        if(sourcePath.isBlank() || sourcePath.isEmpty()) throw new RuntimeException("Could not extract source path");
+
+        return findAllDependencies(mainClassAbsolutePath, mainPackageName, sourcePath, new HashSet<>());
+
+    }
+
+    private Set<String> findAllDependencies(String classPath,String mainPackageName, String sourcePath, Set<String> dependencies){
+        Set<String> classDependencies = findDependencies(classPath);
+        for(String dep: classDependencies) {
+            if (dependencies.contains(dep)) continue;
+            dependencies.add(dep);
+            if (dep.startsWith(mainPackageName)) {
+                String classRelativePath = dep.replace(".", "/");
+                String classAbsolutePath = sourcePath + "/" + classRelativePath + ".java";
+                if (doesPathExist(classAbsolutePath)) {
+                    findAllDependencies(classAbsolutePath,mainPackageName, sourcePath, dependencies);
+                }
+            }
+        }
+        return dependencies;
+    }
+
+    private Set<String> findDependencies(String classAbsolutePath) {
         Path classFilePath = Paths.get(classAbsolutePath);
         if (!Files.exists(classFilePath)) throw new RuntimeException("File does not exist.");
 
@@ -45,6 +82,11 @@ public class ClassDependencyFinder implements DependencyFinderSpec {
         classOrInterfaceCollector.visit(cu, classOrInterfaceNames);
 
         return ClassQualifiedNameResolver.resolveQualifiedNames(packageName, importNames, classOrInterfaceNames);
+    }
+
+    private static boolean doesPathExist(String path){
+        Path filePath = Paths.get(path);
+        return Files.exists(filePath);
     }
 
     private static class ClassOrInterfaceTypeCollector extends VoidVisitorAdapter<Set<String>>{

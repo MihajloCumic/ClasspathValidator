@@ -3,6 +3,7 @@ package classpath.validator.orchestrator.implementation;
 
 import classpath.validator.orchestrator.ClasspathValidator;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,11 +14,11 @@ import java.util.Set;
 public class SingleClasspathValidator extends ClasspathValidator {
 
     @Override
-    public boolean validateClasspath(String classAbsolutePath, List<String> jarsAbsolutePaths) throws RuntimeException {
+    public boolean validateClasspath(String classAbsolutePath, List<String> jarsAbsolutePaths) throws RuntimeException, IOException {
         checkIfPathsExist(classAbsolutePath, jarsAbsolutePaths);
 
         Set<String> jars = new HashSet<>(jarsAbsolutePaths);
-        Set<String> classDependencies = dependencyFinder.findDependencies(classAbsolutePath);
+        Set<String> classDependencies = dependencyFinder.execute(classAbsolutePath);
 
         boolean res = jarValidator.doClassesExistInJars(jars, classDependencies);
         System.out.println(res);
