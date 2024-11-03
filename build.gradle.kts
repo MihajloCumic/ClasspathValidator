@@ -1,5 +1,6 @@
+
 plugins {
-    id("java")
+    `java-library`
 }
 
 group = "org.monorepo"
