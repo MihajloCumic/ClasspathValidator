@@ -27,6 +27,7 @@ public class SingleClasspathValidator extends ClasspathValidator {
 
     private void checkIfPathsExist(String classPath, List<String> jarsPaths) throws RuntimeException{
         if(!doesPathExist(classPath)) throw new RuntimeException("Path does not exist: " + classPath);
+        if(jarsPaths == null) throw new RuntimeException("Jar list is null.");
         for(String path: jarsPaths){
             if(!doesPathExist(path)) throw new RuntimeException("Path does not exist: " + path);
         }

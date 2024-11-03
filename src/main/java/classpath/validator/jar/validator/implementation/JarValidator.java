@@ -12,11 +12,12 @@ import java.util.stream.Collectors;
 public class JarValidator implements JarValidatorSpec {
     @Override
     public boolean doClassesExistInJars(Set<String> jarAbsolutePaths, Set<String> classesQualifiedNames) {
+        if(jarAbsolutePaths == null) return false;
+
         Set<String> classPaths = classesQualifiedNames.stream()
                 .map(name -> name.replace(".", "/") + ".class")
                 .collect(Collectors.toSet());
 
-        // Cache all JAR entries first
         Map<String, Set<String>> jarEntries = jarAbsolutePaths.stream()
                 .collect(Collectors.toMap(
                         path -> path,
