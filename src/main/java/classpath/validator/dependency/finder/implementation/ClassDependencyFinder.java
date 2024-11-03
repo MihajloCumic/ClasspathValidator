@@ -6,6 +6,7 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
@@ -18,6 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ClassDependencyFinder implements DependencyFinderSpec {
+
     @Override
     public Set<String> findDependencies(String classAbsolutePath) {
         Path classFilePath = Paths.get(classAbsolutePath);
@@ -50,6 +52,20 @@ public class ClassDependencyFinder implements DependencyFinderSpec {
         public void visit(ClassOrInterfaceType n, Set<String> arg) {
             super.visit(n, arg);
             arg.add(n.getNameWithScope());
+        }
+
+        @Override
+        public void visit(MethodCallExpr n, Set<String> arg) {
+            super.visit(n, arg);
+            if(n.getScope().isPresent()){
+                String name = n.getScope().get().toString();
+                if (!name.isEmpty() && !name.isBlank()){
+                    if(Character.isUpperCase(name.charAt(0))){
+                        String[] parts = name.split("\\.");
+                        arg.add(parts[0]);
+                    }
+                }
+            }
         }
 
     }
