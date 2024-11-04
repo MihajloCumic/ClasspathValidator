@@ -36,7 +36,7 @@ class SingleClasspathValidatorTest {
 
     @BeforeEach
     void setUp(){
-        classpathValidator = new SingleClasspathValidator(new ClassDependencyFinder(), new JarValidator());
+        classpathValidator = ClasspathValidator.getSingleClasspathValidator(new ClassDependencyFinder(), new JarValidator());
     }
 
     @Test
