@@ -20,7 +20,7 @@ public class SingleClasspathValidator extends ClasspathValidator {
     }
 
     @Override
-    public boolean validateClasspath(String classAbsolutePath, List<String> jarsAbsolutePaths) throws RuntimeException, IOException {
+    public boolean isClassRunnable(String classAbsolutePath, List<String> jarsAbsolutePaths) throws RuntimeException, IOException {
         checkIfPathsExist(classAbsolutePath, jarsAbsolutePaths);
 
         Set<String> jars = new HashSet<>(jarsAbsolutePaths);

@@ -42,12 +42,12 @@ class SingleClasspathValidatorTest {
     @Test
     void nonExistingPath(){
         String path = "/does/not/exist/ClassA.java";
-        assertThrows(RuntimeException.class, () -> classpathValidator.validateClasspath(path, new ArrayList<>()));
+        assertThrows(RuntimeException.class, () -> classpathValidator.isClassRunnable(path, new ArrayList<>()));
     }
 
     @Test
     void nullJarList(){
-        assertThrows(RuntimeException.class, () -> classpathValidator.validateClasspath(classA, null));
+        assertThrows(RuntimeException.class, () -> classpathValidator.isClassRunnable(classA, null));
     }
 
     @Test
@@ -55,7 +55,7 @@ class SingleClasspathValidatorTest {
         List<String> jars = new ArrayList<>();
         jars.add(jarB);
         try {
-            assertFalse(classpathValidator.validateClasspath(classB, jars));
+            assertFalse(classpathValidator.isClassRunnable(classB, jars));
         } catch (IOException e) {
             fail();
         }
@@ -67,7 +67,7 @@ class SingleClasspathValidatorTest {
         jars.add(jarB);
         jars.add(jarA);
         try {
-            assertTrue(classpathValidator.validateClasspath(classB, jars));
+            assertTrue(classpathValidator.isClassRunnable(classB, jars));
         } catch (IOException e) {
             fail();
         }
@@ -78,7 +78,7 @@ class SingleClasspathValidatorTest {
         List<String> jars = new ArrayList<>();
         jars.add(jarB);
         try {
-            assertFalse(classpathValidator.validateClasspath(classA, jars));
+            assertFalse(classpathValidator.isClassRunnable(classA, jars));
         } catch (IOException e) {
             fail();
         }
@@ -89,7 +89,7 @@ class SingleClasspathValidatorTest {
         List<String> jars = new ArrayList<>();
         jars.add(jarA);
         try {
-            assertTrue(classpathValidator.validateClasspath(classA, jars));
+            assertTrue(classpathValidator.isClassRunnable(classA, jars));
         } catch (IOException e) {
             fail();
         }
@@ -100,7 +100,7 @@ class SingleClasspathValidatorTest {
         List<String> jars = new ArrayList<>();
         jars.add(jarA);
         try {
-            assertFalse(classpathValidator.validateClasspath(someAnotherClass, jars));
+            assertFalse(classpathValidator.isClassRunnable(someAnotherClass, jars));
         } catch (IOException e) {
             fail();
         }
@@ -112,7 +112,7 @@ class SingleClasspathValidatorTest {
         jars.add(jarA);
         jars.add(jarCommons);
         try {
-            assertTrue(classpathValidator.validateClasspath(someAnotherClass, jars));
+            assertTrue(classpathValidator.isClassRunnable(someAnotherClass, jars));
         } catch (IOException e) {
             fail();
         }
@@ -124,7 +124,7 @@ class SingleClasspathValidatorTest {
         jars.add(jarA);
         jars.add(jarCommons);
         try {
-            assertFalse(classpathValidator.validateClasspath(classB1, jars));
+            assertFalse(classpathValidator.isClassRunnable(classB1, jars));
         } catch (IOException e) {
             fail();
         }
@@ -135,7 +135,7 @@ class SingleClasspathValidatorTest {
         List<String> jars = new ArrayList<>();
         jars.add(jarB);
         try {
-            assertTrue(classpathValidator.validateClasspath(classB1, jars));
+            assertTrue(classpathValidator.isClassRunnable(classB1, jars));
         } catch (IOException e) {
             fail();
         }

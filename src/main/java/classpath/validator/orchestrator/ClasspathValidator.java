@@ -16,7 +16,7 @@ public abstract class ClasspathValidator {
         this.jarValidator = jarValidator;
     }
 
-    public abstract boolean validateClasspath(String classAbsolutePath, List<String> jarsAbsolutePaths) throws RuntimeException, IOException;
+    public abstract boolean isClassRunnable(String classAbsolutePath, List<String> jarsAbsolutePaths) throws RuntimeException, IOException;
 
     public static ClasspathValidator getSingleClasspathValidator(DependencyFinderSpec dependencyFinder, JarValidatorSpec jarValidator){
         return new SingleClasspathValidator(dependencyFinder, jarValidator);
