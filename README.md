@@ -36,6 +36,8 @@ This component serves as the library's main API. It coordinates the Dependency F
 
 ## Installation
 
+Jar can be downloaded from tags releases v0.0.3-alpha or by on the following link [click here](https://github.com/MihajloCumic/ClasspathValidator/releases/tag/v0.0.3-alpha).
+
 To use this library, you need Java 17 and Gradle. Additionally, add the following dependency:
 **Groovy Gradle**
 ```groovy
