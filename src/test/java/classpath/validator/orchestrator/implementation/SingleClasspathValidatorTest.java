@@ -1,5 +1,7 @@
 package classpath.validator.orchestrator.implementation;
 
+import classpath.validator.dependency.finder.implementation.ClassDependencyFinder;
+import classpath.validator.jar.validator.implementation.JarValidator;
 import classpath.validator.orchestrator.ClasspathValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +36,7 @@ class SingleClasspathValidatorTest {
 
     @BeforeEach
     void setUp(){
-        classpathValidator = new SingleClasspathValidator();
+        classpathValidator = new SingleClasspathValidator(new ClassDependencyFinder(), new JarValidator());
     }
 
     @Test

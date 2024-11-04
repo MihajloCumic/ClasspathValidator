@@ -1,6 +1,8 @@
 package classpath.validator.orchestrator.implementation;
 
 
+import classpath.validator.dependency.finder.DependencyFinderSpec;
+import classpath.validator.jar.validator.JarValidatorSpec;
 import classpath.validator.orchestrator.ClasspathValidator;
 
 import java.io.IOException;
@@ -12,6 +14,10 @@ import java.util.List;
 import java.util.Set;
 
 public class SingleClasspathValidator extends ClasspathValidator {
+
+    public SingleClasspathValidator(DependencyFinderSpec dependencyFinder, JarValidatorSpec jarValidator) {
+        super(dependencyFinder, jarValidator);
+    }
 
     @Override
     public boolean validateClasspath(String classAbsolutePath, List<String> jarsAbsolutePaths) throws RuntimeException, IOException {
